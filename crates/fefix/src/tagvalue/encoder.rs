@@ -69,7 +69,7 @@ impl Encoder {
         // some bytes but the benefits largely outweight the costs.
         //
         // Eight digits (~100MB) are enough for every message.
-        state.set(9, b"00000000" as &[u8]);
+        state.set(9, b"000" as &[u8]);
         state.body_start_i = state.buffer.len();
         state.set(35, msg_type);
         state
@@ -112,7 +112,7 @@ where
     }
 
     fn body_length_writable_range(&self) -> Range<usize> {
-        self.body_start_i - 9..self.body_start_i - 1
+        self.body_start_i - 3..self.body_start_i - 1
     }
 
     fn body_length(&self) -> usize {
