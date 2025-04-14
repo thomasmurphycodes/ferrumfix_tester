@@ -112,7 +112,7 @@ where
     }
 
     fn body_length_writable_range(&self) -> Range<usize> {
-        self.body_start_i - 3..self.body_start_i - 1
+        self.body_start_i - 9..self.body_start_i - 1
     }
 
     fn body_length(&self) -> usize {
@@ -125,7 +125,7 @@ where
         let body_length = self.body_length();
         let body_length_range = self.body_length_writable_range();
         let mut slice = &mut self.buffer.as_mut_slice()[body_length_range];
-        println!("BODY LENGTH BE: {:?}",body_length);
+        println!("BODY LENGTH BE: {:?}", body_length);
         write!(slice, "{:03}", body_length).unwrap();
     }
 
