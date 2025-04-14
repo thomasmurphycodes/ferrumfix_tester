@@ -69,7 +69,7 @@ impl Encoder {
         // some bytes but the benefits largely outweight the costs.
         //
         // Eight digits (~100MB) are enough for every message.
-        state.set(9, b"00000000" as &[u8]);
+        state.set(9, b"000" as &[u8]);
         state.body_start_i = state.buffer.len();
         state.set(35, msg_type);
         state
@@ -125,7 +125,7 @@ where
         let body_length = self.body_length();
         let body_length_range = self.body_length_writable_range();
         let mut slice = &mut self.buffer.as_mut_slice()[body_length_range];
-        write!(slice, "{:08}", body_length).unwrap();
+        write!(slice, "{:02}", body_length).unwrap();
     }
 
     fn write_checksum(&mut self) {
