@@ -69,7 +69,7 @@ impl Encoder {
         // some bytes but the benefits largely outweight the costs.
         //
         // Eight digits (~100MB) are enough for every message.
-        state.set(9, b"000" as &[u8]);
+        state.set(9, b"00000000" as &[u8]);
         state.body_start_i = state.buffer.len();
         state.set(35, msg_type);
         state
@@ -123,23 +123,11 @@ where
         use std::io::Write;
 
         let body_length = self.body_length();
-        // Ensure we have at least three digits; if the number is larger, the full number is printed.
-        let formatted = format!("{:03}", body_length);
-        // If the string is longer than 3 characters, take only the last 3 characters.
-        let last_three = if formatted.len() > 3 {
-            &formatted[formatted.len()-3..]
-        } else {
-            formatted.as_str()
-        };
-        // Remove leading zeros (return "0" if the string becomes empty).
-        let trimmed = last_three.trim_start_matches('0');
-        let output = if trimmed.is_empty() { "0" } else { trimmed };
-
         let body_length_range = self.body_length_writable_range();
         let mut slice = &mut self.buffer.as_mut_slice()[body_length_range];
-        write!(slice, "{}", output).unwrap();
+        println!("BODY LENGTH BE: {:?}",body_length);
+        write!(slice, "{:03}", body_length).unwrap();
     }
-
 
     fn write_checksum(&mut self) {
         let checksum = CheckSum::compute(self.buffer.as_slice());
